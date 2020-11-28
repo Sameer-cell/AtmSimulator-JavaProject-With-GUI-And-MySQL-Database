@@ -1,15 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-public class Signup2 implements ActionListener {
+public class Signup2 implements ActionListener, WindowListener {
     LoginWindow signup2LW=new LoginWindow();
     Labels signup2Labels=new Labels();
     TextField signup2TextField=new TextField();
     ComboBox signup2ComboBox=new ComboBox();
     Buttons signup2Buttons=new Buttons();
     String fno=Signup.formNumber;
+    ButtonGroup buttonGroup=new ButtonGroup();
+    ButtonGroup buttonGroup2=new ButtonGroup();
 
     public Signup2(){
         signup2LW.loginWindow();
@@ -69,7 +70,6 @@ public class Signup2 implements ActionListener {
         signup2Labels.jl9.setText("Senior Citizen:");
         signup2Labels.jl10.setText("Existing Account:");
         signup2Labels.jl11.setText("Qualification:");
-        signup2Labels.jl12.setText("Form no:");
 
         signup2LW.window.add(signup2Labels.jl1);
         signup2LW.window.add(signup2Labels.jl2);
@@ -82,20 +82,34 @@ public class Signup2 implements ActionListener {
         signup2LW.window.add(signup2Labels.jl9);
         signup2LW.window.add(signup2Labels.jl10);
         signup2LW.window.add(signup2Labels.jl11);
-        signup2LW.window.add(signup2Labels.jl12);
         setSignup2Labels();
 
         signup2TextField.jt1.setColumns(15);
         signup2TextField.jt2.setColumns(16);
-        signup2TextField.jt3.setColumns(17);
 
         signup2LW.window.add(signup2TextField.jt1);
         signup2LW.window.add(signup2TextField.jt2);
-        signup2LW.window.add(signup2TextField.jt3);
         setSignup2TextField();
 
         signup2Buttons.jb1.addActionListener(this);
         signup2Buttons.jb1.setActionCommand("Next");
+        signup2LW.window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                super.windowOpened(e);
+            }
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                    Connector c1=new Connector();
+                    String q="delete from signup where formno = '"+fno+"'";
+                    c1.s.executeUpdate(q);
+                    c1.s.close();
+                }catch (Exception e1){
+                    System.out.println(e1.getMessage());
+                }
+            }
+        });
 
     }
 
@@ -109,7 +123,6 @@ public class Signup2 implements ActionListener {
     }
 
     public void setSignup2Labels(){
-        signup2Labels.jl12.setBounds(600,10,100,28);
         signup2Labels.jl1.setBounds(230,45,600,40);
         signup2Labels.jl2.setBounds(100,120,100,28);
         signup2Labels.jl3.setBounds(100,170,100,28);
@@ -134,14 +147,12 @@ public class Signup2 implements ActionListener {
         signup2Labels.jl9.setFont(new Font("Arial", Font.BOLD, 20));
         signup2Labels.jl10.setFont(new Font("Arial", Font.BOLD, 20));
         signup2Labels.jl11.setFont(new Font("Arial", Font.BOLD, 20));
-        signup2Labels.jl12.setFont(new Font("Arial", Font.BOLD, 18));
 
     }
 
     public void setSignup2TextField(){
         signup2TextField.jt2.setBounds(300,393,400,30);
         signup2TextField.jt1.setBounds(300,440,400,30);
-        signup2TextField.jt3.setBounds(680,10,100,30);
         signup2TextField.jt1.setFont(new Font("Arial", Font.BOLD, 14));
         signup2TextField.jt2.setFont(new Font("Arial", Font.BOLD, 14));
         signup2TextField.jt3.setFont(new Font("Arial", Font.BOLD, 14));
@@ -176,6 +187,12 @@ public class Signup2 implements ActionListener {
         signup2LW.window.add(signup2TextField.jr3);
         signup2LW.window.add(signup2TextField.jr4);
 
+        buttonGroup.add(signup2TextField.jr1);
+        buttonGroup.add(signup2TextField.jr2);
+
+        buttonGroup2.add(signup2TextField.jr3);
+        buttonGroup2.add(signup2TextField.jr4);
+
     }
     public static void main(String[] args){
         new Signup2();
@@ -184,17 +201,14 @@ public class Signup2 implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command=e.getActionCommand();
-        if(command == "Next"){
+        if(command.equals("Next")){
             if(signup2TextField.jt1.getText().equals("") ||
-                    signup2TextField.jt2.getText().equals("") || signup2TextField.jt3.getText().equals("") ||
-                    (signup2TextField.jr1.isSelected() && signup2TextField.jr2.isSelected()) ||
-                    (signup2TextField.jr3.isSelected() && signup2TextField.jr4.isSelected())){
+                    signup2TextField.jt2.getText().equals("")){
                 JOptionPane.showMessageDialog(null,"Fill all the details correctly");
-            }else if(signup2TextField.jt3.getText().length()>=5 || signup2TextField.jt1.getText().length()>=13 || signup2TextField.jt1.getText().length()<12 ){
-                JOptionPane.showMessageDialog(null,"Fill the form no and aadhar no correctly");
-            }else if(!signup2TextField.jt3.getText().equals(String.valueOf(fno))){
-                System.out.println(fno);
-                JOptionPane.showMessageDialog(null,"Fill the form no correctly");
+            }else if(!signup2TextField.jr1.isSelected() && !signup2TextField.jr2.isSelected()){
+                JOptionPane.showMessageDialog(null,"Fill all the details correctly");
+            }else if(!signup2TextField.jr3.isSelected() && !signup2TextField.jr4.isSelected()){
+                JOptionPane.showMessageDialog(null,"Fill all the details correctly");
             } else {
                 String religion=(String)signup2ComboBox.c1.getSelectedItem();
                 String category=(String)signup2ComboBox.c2.getSelectedItem();
@@ -215,19 +229,54 @@ public class Signup2 implements ActionListener {
                 }else {
                     existingAccount="No";
                 }
-                String form=signup2TextField.jt3.getText();
                 try{
                     Connector c1=new Connector();
-                    String q="insert into signup2 values('"+form+"','"+religion+"','"+category+"','"+income+"','"+education+"','"+
+                    String q="insert into signup2 values('"+fno+"','"+religion+"','"+category+"','"+income+"','"+education+"','"+
                             occupation+"','"+pan+"','"+adhar+"','"+seniorCitizen+"','"+existingAccount+"')";
                     c1.s.executeUpdate(q);
                     signup2LW.window.setVisible(false);
                     new Signup3();
+                    c1.s.close();
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
                 }
 
             }
         }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 }
