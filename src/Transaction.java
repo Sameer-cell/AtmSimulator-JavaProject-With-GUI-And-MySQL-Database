@@ -9,6 +9,7 @@ public class Transaction implements ActionListener {
     Buttons transcationButtons=new Buttons();
     Labels transactionLabel=new Labels();
     String account_no=Login.accountNumber;
+    String pin_no=Login.pinNumber;
 
     Transaction(){
         transctionLW.loginWindow();
@@ -131,7 +132,7 @@ public class Transaction implements ActionListener {
             case "BALANCE ENQUIRY":
                 try {
                     Connector c1=new Connector();
-                    String q="Select balance from bank Where account ='"+account_no+"'";
+                    String q="Select balance from bank Where account ='"+account_no+"' AND pin ='"+pin_no+"'";
                     ResultSet rs=c1.s.executeQuery(q);
                     if(rs.next()){
                         String balance=rs.getString("balance");
@@ -139,6 +140,7 @@ public class Transaction implements ActionListener {
                     }else {
                         System.out.println("Some error");
                     }
+                    c1.s.close();
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
                 }
