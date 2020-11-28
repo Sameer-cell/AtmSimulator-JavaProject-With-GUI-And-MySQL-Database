@@ -7,5 +7,4 @@ public class TextField {
     JRadioButton jr1=new JRadioButton(),jr2=new JRadioButton(),jr3=new JRadioButton(),jr4=new JRadioButton(),
             jr5=new JRadioButton();
 
-
 }
