@@ -7,8 +7,6 @@ public class MiniStatement extends JFrame {
     JScrollPane sp;
     DefaultTableModel model=new DefaultTableModel();
     String []heading={"Account no","Pin no","Deposit","Withdraw","Balance"};
-//    String[][]data=new String[20][5];
-//    int i=0,j=0;
     String number=Login.accountNumber;
 
     MiniStatement(){
@@ -32,7 +30,7 @@ public class MiniStatement extends JFrame {
         String balance="";
         try{
             Connector c1=new Connector();
-          String q="select * from statement Where account ='"+number+"'";
+          String q="select * from statement Where account ='"+number+"' order by transaction_id Desc";
             ResultSet rs=c1.s.executeQuery(q);
             while (rs.next()){
                 account=rs.getString("account");
@@ -41,25 +39,9 @@ public class MiniStatement extends JFrame {
                 withdraw=rs.getString("withdraw");
                 balance=rs.getString("balance");
                 model.addRow(new Object[]{account,pin,deposit,withdraw,balance});
-
-//                data[i][j++]=rs.getString("account");
-//                data[i][j++]=rs.getString("pin");
-//                data[i][j++]=rs.getString("deposit");
-//                data[i][j++]=rs.getString("withdraw");
-//                data[i][j]=rs.getString("balance");
-//                i++;
-//                j=0;
-
             }
             setVisible(true);
-//            table=new JTable(data,heading);
-//            table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-//
-//            sp=new JScrollPane(table);
-//            sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//            sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//            add(sp);
-//            setVisible(true);
+            c1.s.close();
         }catch (Exception e1){
             System.out.println(e1.getMessage());
             e1.printStackTrace();
