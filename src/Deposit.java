@@ -10,6 +10,7 @@ public class Deposit implements ActionListener {
     Labels depositLabel=new Labels();
     TextField depositPin=new TextField();
     String daccount_no=Login.accountNumber;
+    String dpin_no=Login.pinNumber;
 
     Deposit(){
         depositLW.loginWindow();
@@ -25,13 +26,8 @@ public class Deposit implements ActionListener {
         depositLabel.jl3.setFont(new Font("System", Font.BOLD, 38));
         depositLabel.jl3.setBounds(280,200,400,40);
 
-        depositLabel.jl2.setText("Enter Pin : ");
-        depositLW.window.add(depositLabel.jl2);
-        depositLabel.jl2.setFont(new Font("Raleway", Font.BOLD, 14));
-        depositLabel.jl2.setBounds(600,10,80,30);
 
         setDepositButtons();
-        setDepositPin();
         setAmount();
 
     }
@@ -42,13 +38,6 @@ public class Deposit implements ActionListener {
         depositPin.jt1.setBounds(240,300,350,40);
         depositPin.jt1.setFont(new Font("System", Font.BOLD, 18));
 
-    }
-
-    public void setDepositPin(){
-        depositPin.jp1.setColumns(10);
-        depositPin.jp1.setBounds(680,10,70,30);
-        depositPin.jp1.setFont(new Font("Raleway", Font.BOLD, 18));
-        depositLW.window.add(depositPin.jp1);
     }
     
     public void setDepositButtons(){
@@ -94,54 +83,43 @@ public class Deposit implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command=e.getActionCommand();
-        switch (command){
-            case "Exit": System.exit(0); break;
-            case  "Back":
+        String command = e.getActionCommand();
+        switch (command) {
+            case "Exit":
+                System.exit(0);
+                break;
+            case "Back":
                 depositLW.window.setVisible(false);
                 new Transaction();
                 break;
             case "Deposit":
-                char []c=depositPin.jp1.getPassword();
-                String pin=toString((c));
-                String amount=depositPin.jt1.getText();
-                if(depositPin.jt1.getText().equals("")){
-                    JOptionPane.showMessageDialog(null,"Fill all the Details");
-                }else if(depositPin.jp1.getPassword().equals("")){
-                    JOptionPane.showMessageDialog(null,"Fill the Pin No");
-                }else{
-                    try {
-                        Connector c1=new Connector();
-                        String q1="select balance from bank where account = '" + daccount_no + "' AND pin ='"+pin+"'";
-                        ResultSet rs=c1.s.executeQuery(q1);
-                        double balance=0;
-                        if(rs.next()){
-                            String balance1 = rs.getString("balance");
-                            double d = Double.parseDouble(amount);
-                            if(d<=0){
-                                JOptionPane.showMessageDialog(null,"Please Enter correct Amount");
-                            }else {
-                                balance = d + Double.parseDouble(balance1);
-                                String q2 = "UPDATE bank SET deposit ='" + amount + "',balance = '" + balance + "' WHERE account ='" + daccount_no + "'";
-                                String q3= "insert into statement values("+daccount_no+","+pin+","+amount+",'0',"+balance+")";
-                                c1.s.executeUpdate(q2);
-                                c1.s.executeUpdate(q3);
-                                JOptionPane.showMessageDialog(null, "Rs. " + amount + " Deposited Successfully");
-                                depositLW.window.setVisible(false);
-                                new Transaction();
-                            }
-                        }else {
-                            JOptionPane.showMessageDialog(null, "Incorrect Card Number or Password");
+                String pin = dpin_no;
+                String amount = depositPin.jt1.getText();
+                try {
+                    Connector c1 = new Connector();
+                    String q1 = "select balance from bank where account = '" + daccount_no + "' AND pin ='" + pin + "'";
+                    ResultSet rs = c1.s.executeQuery(q1);
+                    double balance = 0;
+                    if (rs.next()) {
+                        String balance1 = rs.getString("balance");
+                        double d = Double.parseDouble(amount);
+                        if (d <= 0) {
+                            JOptionPane.showMessageDialog(null, "Please Enter correct Amount");
+                        } else {
+                            balance = d + Double.parseDouble(balance1);
+                            String q2 = "UPDATE bank SET deposit ='" + amount + "',balance = '" + balance + "' WHERE account ='" + daccount_no + "'";
+                            String q3 = "insert into statement (account,pin,deposit,withdraw,balance) values(" + daccount_no + "," + pin + "," + amount + ",'0'," + balance + ")";
+                            c1.s.executeUpdate(q2);
+                            c1.s.executeUpdate(q3);
+                            JOptionPane.showMessageDialog(null, "Rs. " + amount + " Deposited Successfully");
+                            depositLW.window.setVisible(false);
+                            new Transaction();
+                            c1.s.close();
                         }
-                    }catch (Exception e1){
-                        System.out.println(e1.getMessage());
                     }
+                } catch (Exception e1) {
+                    System.out.println(e1.getMessage());
                 }
-
         }
-    }
-
-    private String toString(char[] c) {
-        return new String(c);
     }
 }
