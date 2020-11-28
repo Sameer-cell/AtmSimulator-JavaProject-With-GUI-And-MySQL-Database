@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
+import java.sql.ResultSet;
 
 public class Signup implements ActionListener {
 
@@ -11,11 +11,8 @@ public class Signup implements ActionListener {
     TextField signupTextField=new TextField();
     ComboBox signupComboBox=new ComboBox();
     Buttons signupButton=new Buttons();
-
-
-    Random rm=new Random();
-    long first4=(rm.nextLong() % 9000L)+1000L;
-    long four=Math.abs(first4);
+    ButtonGroup buttonGroup=new ButtonGroup();
+    ButtonGroup buttonGroup2=new ButtonGroup();
 
     String x="";
     public static String formNumber;
@@ -23,6 +20,20 @@ public class Signup implements ActionListener {
 
 
     public Signup(){
+        try{
+            Connector c1=new Connector();
+            String q="Select formno from signup";
+            ResultSet rs=c1.s.executeQuery(q);
+            int count=1;
+            while (rs.next()){
+                count++;
+            }
+            x=x+count;
+            c1.s.close();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
         signupLoginWindow.loginWindow();
         signupLoginWindow.window.setTitle("SignUp Form");
 
@@ -50,7 +61,7 @@ public class Signup implements ActionListener {
         signupComboBox.c3.setBounds(610,240,90,30);
 
 
-        signupLabels.jl1.setText("APPLICATION FORM NO."+four);
+        signupLabels.jl1.setText("APPLICATION FORM NO."+x);
         signupLabels.jl2.setText("Page 1: Personal Details:");
         signupLabels.jl3.setText("Name:");
         signupLabels.jl4.setText("Father`s Name:");
@@ -193,6 +204,13 @@ public class Signup implements ActionListener {
         signupTextField.jr3.setBounds(300,390,100,30);
         signupTextField.jr4.setBounds(450,390,100,30);
 
+
+        buttonGroup.add(signupTextField.jr1);
+        buttonGroup.add(signupTextField.jr2);
+
+        buttonGroup2.add(signupTextField.jr3);
+        buttonGroup2.add(signupTextField.jr4);
+
     }
 
     public static void main(String[] args){
@@ -202,8 +220,7 @@ public class Signup implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String  command=e.getActionCommand();
-        if(command =="Next"){
-            x=x+four;
+        if(command.equals("Next")){
             formNumber=x;
                 String name=signupTextField.jt1.getText();
                 String fathersName=signupTextField.jt2.getText();
@@ -231,20 +248,23 @@ public class Signup implements ActionListener {
                     if(signupTextField.jt1.getText().equals("") || signupTextField.jt2.getText().equals("") ||
                             signupTextField.jt3.getText().equals("") || signupTextField.jt4.getText().equals("") ||
                             signupTextField.jt5.getText().equals("") || signupTextField.jt6.getText().equals("") ||
-                            signupTextField.jt7.getText().equals("") ||
-                            (signupTextField.jr1.isSelected() && signupTextField.jr2.isSelected()) ||
-                            (signupTextField.jr3.isSelected() && signupTextField.jr4.isSelected()) ){
+                            signupTextField.jt7.getText().equals("")){
                         JOptionPane.showMessageDialog(null,"Fill all the details correctly");
-                    }else {
+                    }else if(!signupTextField.jr1.isSelected() && !signupTextField.jr2.isSelected()){
+                        JOptionPane.showMessageDialog(null,"Fill all the details correctly");
+                    }else if(!signupTextField.jr3.isSelected() && !signupTextField.jr4.isSelected()){
+                        JOptionPane.showMessageDialog(null,"Fill all the details correctly");
+                    } else{
                         Connector c1=new Connector();
                         String q="insert into signup (name,fname,date,month,year,gender,email, marital,address,city,pincode,state,formno) values ('"
                                 +name+"','"
                                 +fathersName+"','"+date+"','"+month+"','"+year+"','"
                                 +gender+"','"+email+"','"+maritalStatus+"','"
-                                +address+"','"+city+"','"+pin_code+"','"+state+"','"+four+"')";
+                                +address+"','"+city+"','"+pin_code+"','"+state+"','"+x+"')";
                         c1.s.executeUpdate(q);
                         signupLoginWindow.window.setVisible(false);
                         new Signup2();
+                        c1.s.close();
                     }
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
