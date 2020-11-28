@@ -131,6 +131,7 @@ public class PinChange implements ActionListener {
                             JOptionPane.showMessageDialog(null,"Pin Changed Successfully");
                             pinChangeLW.window.setVisible(false);
                             new Transaction();
+                            c1.s.close();
                         }
                     }catch (Exception e1){
                         System.out.println(e1.getMessage());
