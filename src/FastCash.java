@@ -9,17 +9,12 @@ public class FastCash implements ActionListener {
     LoginWindow fastcashLW=new LoginWindow();
     Buttons fastcashButtons=new Buttons();
     Labels fastcashLabel=new Labels();
-    TextField fastcashPin=new TextField();
     String f_accountno=Login.accountNumber;
+    String f_pinno=Login.pinNumber;
 
     FastCash(){
         fastcashLW.loginWindow();
         fastcashLW.window.setTitle("FAST CASH");
-
-        fastcashPin.jp1.setColumns(10);
-        fastcashLW.window.add(fastcashPin.jp1);
-        fastcashPin.jp1.setBounds(680,10,70,30);
-        fastcashPin.jp1.setFont(new Font("System", Font.BOLD,18));
 
         setfastcashButtons();
 
@@ -27,11 +22,6 @@ public class FastCash implements ActionListener {
         fastcashLW.window.add(fastcashLabel.jl1);
         fastcashLabel.jl1.setFont(new Font("System", Font.BOLD, 38));
         fastcashLabel.jl1.setBounds(120,100,700,40);
-
-        fastcashLabel.jl2.setText("Enter Pin : ");
-        fastcashLW.window.add(fastcashLabel.jl2);
-        fastcashLabel.jl2.setFont(new Font("Arial", Font.BOLD, 15));
-        fastcashLabel.jl2.setBounds(600,10,80,30);
 
 
 
@@ -124,8 +114,7 @@ public class FastCash implements ActionListener {
                 break;
             case "100":
                 try {
-                    char []c=fastcashPin.jp1.getPassword();
-                    String pin=toString(c);
+                    String pin=f_pinno;
                     Connector c1=new Connector();
                     String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
                     ResultSet rs=c1.s.executeQuery(q1);
@@ -137,12 +126,13 @@ public class FastCash implements ActionListener {
                             JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
                         }else {
                             String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
+                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
                             c1.s.executeUpdate(q3);
                             c1.s.executeUpdate(q2);
                             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
                             fastcashLW.window.setVisible(false);
                             new Transaction();
+                            c1.s.close();
                         }
                     }else {
                         JOptionPane.showMessageDialog(null,"Incorrect pin");
@@ -153,8 +143,7 @@ public class FastCash implements ActionListener {
                 break;
             case "500":
                 try {
-                    char []c=fastcashPin.jp1.getPassword();
-                    String pin=toString(c);
+                    String pin=f_pinno;
                     Connector c1=new Connector();
                     String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
                     ResultSet rs=c1.s.executeQuery(q1);
@@ -166,12 +155,13 @@ public class FastCash implements ActionListener {
                             JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
                         }else {
                             String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
+                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
                             c1.s.executeUpdate(q3);
                             c1.s.executeUpdate(q2);
                             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
                             fastcashLW.window.setVisible(false);
                             new Transaction();
+                            c1.s.close();
                         }
                     }else {
                         JOptionPane.showMessageDialog(null,"Incorrect pin");
@@ -182,8 +172,7 @@ public class FastCash implements ActionListener {
                 break;
             case "1000":
                 try {
-                    char []c=fastcashPin.jp1.getPassword();
-                    String pin=toString(c);
+                    String pin=f_pinno;
                     Connector c1=new Connector();
                     String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
                     ResultSet rs=c1.s.executeQuery(q1);
@@ -195,12 +184,13 @@ public class FastCash implements ActionListener {
                             JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
                         }else {
                             String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
+                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
                             c1.s.executeUpdate(q3);
                             c1.s.executeUpdate(q2);
                             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
                             fastcashLW.window.setVisible(false);
                             new Transaction();
+                            c1.s.close();
                         }
                     }else {
                         JOptionPane.showMessageDialog(null,"Incorrect pin");
@@ -211,8 +201,7 @@ public class FastCash implements ActionListener {
                 break;
             case "2000":
                 try {
-                    char []c=fastcashPin.jp1.getPassword();
-                    String pin=toString(c);
+                    String pin=f_pinno;
                     Connector c1=new Connector();
                     String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
                     ResultSet rs=c1.s.executeQuery(q1);
@@ -224,12 +213,13 @@ public class FastCash implements ActionListener {
                             JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
                         }else {
                             String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
+                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
                             c1.s.executeUpdate(q3);
                             c1.s.executeUpdate(q2);
                             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
                             fastcashLW.window.setVisible(false);
                             new Transaction();
+                            c1.s.close();
                         }
                     }else {
                         JOptionPane.showMessageDialog(null,"Incorrect pin");
@@ -240,8 +230,7 @@ public class FastCash implements ActionListener {
                 break;
             case "5000":
                 try {
-                    char []c=fastcashPin.jp1.getPassword();
-                    String pin=toString(c);
+                    String pin=f_pinno;
                     Connector c1=new Connector();
                     String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
                     ResultSet rs=c1.s.executeQuery(q1);
@@ -253,12 +242,13 @@ public class FastCash implements ActionListener {
                             JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
                         }else {
                             String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
+                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
                             c1.s.executeUpdate(q3);
                             c1.s.executeUpdate(q2);
                             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
                             fastcashLW.window.setVisible(false);
                             new Transaction();
+                            c1.s.close();
                         }
                     }else {
                         JOptionPane.showMessageDialog(null,"Incorrect pin");
@@ -269,8 +259,7 @@ public class FastCash implements ActionListener {
                 break;
             case "10000":
                 try {
-                    char []c=fastcashPin.jp1.getPassword();
-                    String pin=toString(c);
+                    String pin=f_pinno;
                     Connector c1=new Connector();
                     String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
                     ResultSet rs=c1.s.executeQuery(q1);
@@ -282,12 +271,13 @@ public class FastCash implements ActionListener {
                             JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
                         }else {
                             String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
+                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
                             c1.s.executeUpdate(q3);
                             c1.s.executeUpdate(q2);
                             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
                             fastcashLW.window.setVisible(false);
                             new Transaction();
+                            c1.s.close();
                         }
                     }else {
                         JOptionPane.showMessageDialog(null,"Incorrect pin");
@@ -298,9 +288,5 @@ public class FastCash implements ActionListener {
                 break;
         }
 
-    }
-
-    private String toString(char[] c) {
-        return new String(c);
     }
 }
