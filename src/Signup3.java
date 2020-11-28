@@ -1,16 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Random;
+import java.awt.event.*;
+import java.sql.ResultSet;
 
-public class Signup3 implements ActionListener {
+public class Signup3 implements ActionListener, WindowListener {
     LoginWindow signup3LoginWindow=new LoginWindow();
     Labels signup3Lables=new Labels();
     TextField signup3Radio=new TextField();
     CheckBox signup3CheckBox=new CheckBox();
     Buttons signup3Buttons=new Buttons();
     String signup3Form_no=Signup.formNumber;
+    ButtonGroup buttonGroup=new ButtonGroup();
+    String first4="";
+    String first8="459115466871";
 
     Signup3(){
         signup3LoginWindow.loginWindow();
@@ -20,11 +22,6 @@ public class Signup3 implements ActionListener {
         setSignup3Buttons();
         setSignup3CheckBox();
         setSignup3Radio();
-
-        signup3Radio.jt1.setColumns(10);
-        signup3LoginWindow.window.add(signup3Radio.jt1);
-        signup3Radio.jt1.setBounds(680,10,70,30);
-        signup3Radio.jt1.setFont(new Font("System", Font.BOLD, 18));
 
 
         signup3Lables.jl1.setText("Page 3: Account Details");
@@ -37,7 +34,6 @@ public class Signup3 implements ActionListener {
         signup3Lables.jl8.setText("XXXX");
         signup3Lables.jl9.setText("(4-digit password)");
         signup3Lables.jl10.setText("Services Required:");
-        signup3Lables.jl11.setText("Form No:");
 
         signup3LoginWindow.window.add(signup3Lables.jl1);
         signup3LoginWindow.window.add(signup3Lables.jl2);
@@ -49,7 +45,6 @@ public class Signup3 implements ActionListener {
         signup3LoginWindow.window.add(signup3Lables.jl8);
         signup3LoginWindow.window.add(signup3Lables.jl9);
         signup3LoginWindow.window.add(signup3Lables.jl10);
-        signup3LoginWindow.window.add(signup3Lables.jl11);
         setSignup3Lables();
 
         signup3Buttons.jb1.addActionListener(this);
@@ -58,10 +53,30 @@ public class Signup3 implements ActionListener {
         signup3Buttons.jb2.addActionListener(this);
         signup3Buttons.jb2.setActionCommand("Submit");
 
+        signup3LoginWindow.window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                super.windowOpened(e);
+            }
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                    Connector c1=new Connector();
+                    String q="delete from signup where formno = '"+signup3Form_no+"'";
+                    String q1="delete from signup2 where formno = '"+signup3Form_no+"'";
+                    c1.s.executeUpdate(q);
+                    c1.s.executeUpdate(q1);
+                    c1.s.close();
+                }catch (Exception e1){
+                    System.out.println(e1.getMessage());
+                }
+            }
+        });
+
+
     }
 
     public void setSignup3Lables(){
-        signup3Lables.jl11.setBounds(600,10,70,30);
         signup3Lables.jl1.setBounds(280,50,400,40);
         signup3Lables.jl2.setBounds(100,100,200,30);
         signup3Lables.jl3.setBounds(100,260,200,30);
@@ -73,7 +88,6 @@ public class Signup3 implements ActionListener {
         signup3Lables.jl9.setBounds(100,360,200,20);
         signup3Lables.jl10.setBounds(100,410,200,30);
 
-        signup3Lables.jl11.setFont(new Font("System",Font.BOLD,18));
 
 
         signup3Lables.jl1.setFont(new Font("Raleway", Font.BOLD, 22));
@@ -86,8 +100,6 @@ public class Signup3 implements ActionListener {
         signup3Lables.jl8.setFont(new Font("Raleway", Font.BOLD, 18));
         signup3Lables.jl9.setFont(new Font("Raleway", Font.BOLD, 12));
         signup3Lables.jl10.setFont(new Font("Raleway", Font.BOLD, 18));
-        signup3Lables.jl11.setFont(new Font("Raleway", Font.BOLD, 14));
-        signup3Lables.jl11.setFont(new Font("System", Font.BOLD, 15));
 
     }
 
@@ -122,6 +134,11 @@ public class Signup3 implements ActionListener {
 
         signup3Radio.jr4.setFont(new Font("Raleway", Font.BOLD, 16));
         signup3Radio.jr4.setBackground(new Color(51, 255, 247));
+
+        buttonGroup.add(signup3Radio.jr1);
+        buttonGroup.add(signup3Radio.jr2);
+        buttonGroup.add(signup3Radio.jr3);
+        buttonGroup.add(signup3Radio.jr4);
 
     }
 
@@ -213,22 +230,17 @@ public class Signup3 implements ActionListener {
                 String q2="Delete From signup WHERE formno ="+signup3Form_no+"";
                 c1.s.executeUpdate(q1);
                 c1.s.executeUpdate(q2);
+                c1.s.close();
             }catch (Exception e1){
                 System.out.println(e1.getMessage());
             }
             System.exit(0);
         }else if(command.equals("Submit")){
-            if((signup3Radio.jr1.isSelected() && signup3Radio.jr2.isSelected()) || (signup3Radio.jr1.isSelected() && signup3Radio.jr3.isSelected()) ||
-                    (signup3Radio.jr1.isSelected() && signup3Radio.jr4.isSelected()) || (signup3Radio.jr2.isSelected() && signup3Radio.jr3.isSelected()) ||
-                    (signup3Radio.jr2.isSelected() && signup3Radio.jr4.isSelected()) || (signup3Radio.jr3.isSelected() && signup3Radio.jr4.isSelected())) {
-                JOptionPane.showMessageDialog(null, "Select only one Account Type");
-            }else if (!signup3Radio.jt1.getText().equals(String.valueOf(signup3Form_no))){
-                JOptionPane.showMessageDialog(null,"Enter Correct Form No");
-            }else if(!signup3CheckBox.cb7.isSelected()){
+            if(!signup3CheckBox.cb7.isSelected()){
                 JOptionPane.showMessageDialog(null,"Select the last Check Box");
             }else if(!signup3Radio.jr1.isSelected() && !signup3Radio.jr2.isSelected() && !signup3Radio.jr3.isSelected() && !signup3Radio.jr4.isSelected()){
-                JOptionPane.showMessageDialog(null,"Select an Account Type");
-            }else {
+                JOptionPane.showMessageDialog(null,"Fill all the details correctly");
+            } else {
                 String accountType="";
                 if(signup3Radio.jr1.isSelected()){
                     accountType="Saving Account";
@@ -239,12 +251,23 @@ public class Signup3 implements ActionListener {
                 }else if(signup3Radio.jr4.isSelected()){
                     accountType="Recurring Deposit Account";
                 }
-                Random ran = new Random();
-                long first7 = (ran.nextLong() % 90000000L) + 4591936000000000L;
-                long first8 = Math.abs(first7);
 
-                long first3 = (ran.nextLong() % 9000L) + 1000L;
-                long first4 = Math.abs(first3);
+                try {
+                    Connector c1=new Connector();
+                    String q="Select formno from signup3";
+                    ResultSet rs=c1.s.executeQuery(q);
+                    int count4=4575;
+                    while (rs.next()){
+                        count4++;
+                    }
+                    long f=count4+755;
+                    first4=first4+count4;
+                    first8=first8+f;
+                    c1.s.close();
+                }catch (Exception e1){
+                    System.out.println(e1.getMessage());
+                }
+
 
                 String servicesRequired="";
                 if(signup3CheckBox.cb1.isSelected()){
@@ -265,24 +288,21 @@ public class Signup3 implements ActionListener {
                 if(signup3CheckBox.cb6.isSelected()){
                     servicesRequired = servicesRequired+" E-Statement";
                 }
-                String form_no=signup3Radio.jt1.getText();
 
                 try {
                     Connector c1=new Connector();
-                    String q1 = "insert into signup3 values('"+form_no+"','"+accountType+"','"+first8+"','"+first4+"','"+servicesRequired+"')";
+                    String q1 = "insert into signup3 values('"+signup3Form_no+"','"+accountType+"','"+first8+"','"+first4+"','"+servicesRequired+"')";
                     String q2 = "insert into login values('"+first8+"','"+first4+"')";
                     String q3= "insert into bank values('"+first8+"','"+first4+"','0','0','0')";
-                    String q4= "insert into statement values('"+first8+"','"+first4+"','0','0','0')";
+                    String q4= "insert into statement (account,pin,deposit,withdraw,balance) values('"+first8+"','"+first4+"','0','0','0')";
                     c1.s.executeUpdate(q1);
                     c1.s.executeUpdate(q2);
                     c1.s.executeUpdate(q3);
                     c1.s.executeUpdate(q4);
                     JOptionPane.showMessageDialog(null,"Account no : "+first8+"\n Pin no : "+first4);
                     signup3LoginWindow.window.setVisible(false);
-                    String k="";
-                    k=k+first8;
-                    Login.accountNumber=k;
-                    new Deposit();
+                    new Login();
+                    c1.s.close();
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
                 }
@@ -292,4 +312,38 @@ public class Signup3 implements ActionListener {
         }
     }
 
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
 }
