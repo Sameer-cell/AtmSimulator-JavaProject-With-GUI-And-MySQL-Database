@@ -10,6 +10,7 @@ public class Login implements ActionListener {
     TextField textField=new TextField();
     Buttons buttons=new Buttons();
     public static String accountNumber;
+    static public String pinNumber;
 
     public Login(){
         lw.loginWindow();
@@ -108,6 +109,7 @@ public class Login implements ActionListener {
                         accountNumber=account_no;
                         char[] c= textField.jp1.getPassword();
                         String pin = toString((c));
+                        pinNumber=pin;
                         String q = "select * from login where cardno = '" + account_no + "' and pin = '" + pin + "'";
                         ResultSet rs = c1.s.executeQuery(q);
 
@@ -118,6 +120,7 @@ public class Login implements ActionListener {
                             JOptionPane.showMessageDialog(null, "Incorrect Card Number or Password");
 
                         }
+                        c1.s.close();
                     }catch (Exception e1){
                         System.out.println(e1.getMessage());
                     }
