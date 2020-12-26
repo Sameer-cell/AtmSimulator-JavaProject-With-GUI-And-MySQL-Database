@@ -95,8 +95,8 @@ public class Deposit implements ActionListener {
             case "Deposit":
                 String pin = dpin_no;
                 String amount = depositPin.jt1.getText();
+                Connector c1 = new Connector();
                 try {
-                    Connector c1 = new Connector();
                     String q1 = "select balance from bank where account = '" + daccount_no + "' AND pin ='" + pin + "'";
                     ResultSet rs = c1.s.executeQuery(q1);
                     double balance = 0;
@@ -114,11 +114,17 @@ public class Deposit implements ActionListener {
                             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Deposited Successfully");
                             depositLW.window.setVisible(false);
                             new Transaction();
-                            c1.s.close();
                         }
                     }
                 } catch (Exception e1) {
                     System.out.println(e1.getMessage());
+                }finally {
+                    try{
+                        c1.c.close();
+                        c1.s.close();
+                    }catch (Exception e5){
+                        System.out.println(e5.getMessage());
+                    }
                 }
         }
     }
