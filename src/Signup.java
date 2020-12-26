@@ -22,11 +22,11 @@ public class Signup implements ActionListener {
     public Signup(){
         try{
             Connector c1=new Connector();
-            String q="Select formno from signup";
+            String q="Select count(*) from signup";
             ResultSet rs=c1.s.executeQuery(q);
             int count=1;
-            while (rs.next()){
-                count++;
+            if(rs.next()){
+                count=count+Integer.parseInt(rs.getString("count(*)"));
             }
             x=x+count;
             c1.s.close();
