@@ -100,13 +100,19 @@ public class Signup2 implements ActionListener, WindowListener {
             }
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
+                Connector c1=new Connector();
                 try {
-                    Connector c1=new Connector();
                     String q="delete from signup where formno = '"+fno+"'";
                     c1.s.executeUpdate(q);
-                    c1.s.close();
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
+                }finally {
+                    try{
+                        c1.c.close();
+                        c1.s.close();
+                    }catch (Exception e5){
+                        System.out.println(e5.getMessage());
+                    }
                 }
             }
         });
@@ -229,16 +235,22 @@ public class Signup2 implements ActionListener, WindowListener {
                 }else {
                     existingAccount="No";
                 }
+                Connector c1=new Connector();
                 try{
-                    Connector c1=new Connector();
                     String q="insert into signup2 values('"+fno+"','"+religion+"','"+category+"','"+income+"','"+education+"','"+
                             occupation+"','"+pan+"','"+adhar+"','"+seniorCitizen+"','"+existingAccount+"')";
                     c1.s.executeUpdate(q);
                     signup2LW.window.setVisible(false);
                     new Signup3();
-                    c1.s.close();
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
+                }finally {
+                    try{
+                        c1.c.close();
+                        c1.s.close();
+                    }catch (Exception e5){
+                        System.out.println(e5.getMessage());
+                    }
                 }
 
             }
