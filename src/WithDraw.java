@@ -95,8 +95,8 @@ public class WithDraw implements ActionListener {
             case "Withdraw":
                 String pin = w_pinno;
                 String amount = withdrawPin.jt1.getText();
+                Connector c1 = new Connector();
                 try {
-                    Connector c1 = new Connector();
                     String q1 = "select balance from bank where account = '" + w_accountno + "' AND pin ='" + pin + "'";
                     ResultSet rs = c1.s.executeQuery(q1);
                     if (rs.next()) {
@@ -104,7 +104,7 @@ public class WithDraw implements ActionListener {
                         double d = Double.parseDouble(amount);
                         balance = balance - d;
                         if (balance <= 0) {
-                            JOptionPane.showMessageDialog(null, "Please Enter correct Amount");
+                            JOptionPane.showMessageDialog(null, "Balance can not be Negative");
                         } else {
                             String q2 = "UPDATE bank SET withdraw ='" + amount + "',balance = '" + balance + "' WHERE account ='" + w_accountno + "'";
                             String q3 = "insert into statement (account,pin,deposit,withdraw,balance) values(" + w_accountno + "," + pin + ",'0'," + amount + "," + balance + ")";
@@ -113,14 +113,18 @@ public class WithDraw implements ActionListener {
                             JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdraw Successful");
                             withdrawLW.window.setVisible(false);
                             new Transaction();
-                            c1.s.close();
                         }
                     }
                 } catch (Exception e1) {
                     System.out.println(e1.getMessage());
+                }finally {
+                    try{
+                        c1.c.close();
+                        c1.s.close();
+                    }catch (Exception e5){
+                        System.out.println(e5.getMessage());
+                    }
                 }
-
         }
-
     }
 }
