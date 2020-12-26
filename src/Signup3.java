@@ -11,8 +11,6 @@ public class Signup3 implements ActionListener, WindowListener {
     Buttons signup3Buttons=new Buttons();
     String signup3Form_no=Signup.formNumber;
     ButtonGroup buttonGroup=new ButtonGroup();
-    String first4="";
-    String first8="459115466871";
 
     Signup3(){
         signup3LoginWindow.loginWindow();
@@ -28,11 +26,11 @@ public class Signup3 implements ActionListener, WindowListener {
         signup3Lables.jl2.setText("Account Type:");
         signup3Lables.jl3.setText("Card Number:");
         signup3Lables.jl4.setText("XXXX-XXXX-XXXX-4184");
-        signup3Lables.jl5.setText("(Your 16-digit Card number)");
+        signup3Lables.jl5.setText("(Your Account number)");
         signup3Lables.jl6.setText("It would appear on ATM Card/Cheque Book and Statements");
         signup3Lables.jl7.setText("PIN:");
         signup3Lables.jl8.setText("XXXX");
-        signup3Lables.jl9.setText("(4-digit password)");
+        signup3Lables.jl9.setText("(Your password)");
         signup3Lables.jl10.setText("Services Required:");
 
         signup3LoginWindow.window.add(signup3Lables.jl1);
@@ -238,9 +236,12 @@ public class Signup3 implements ActionListener, WindowListener {
         }else if(command.equals("Submit")){
             if(!signup3CheckBox.cb7.isSelected()){
                 JOptionPane.showMessageDialog(null,"Select the last Check Box");
-            }else if(!signup3Radio.jr1.isSelected() && !signup3Radio.jr2.isSelected() && !signup3Radio.jr3.isSelected() && !signup3Radio.jr4.isSelected()){
+            }else if(!signup3Radio.jr1.isSelected() && !signup3Radio.jr2.isSelected() && !signup3Radio.jr3.isSelected()
+                    && !signup3Radio.jr4.isSelected()){
                 JOptionPane.showMessageDialog(null,"Fill all the details correctly");
             } else {
+                String first4="";
+                String first8="459115466871";
                 String accountType="";
                 if(signup3Radio.jr1.isSelected()){
                     accountType="Saving Account";
@@ -254,11 +255,11 @@ public class Signup3 implements ActionListener, WindowListener {
 
                 try {
                     Connector c1=new Connector();
-                    String q="Select formno from signup3";
+                    String q="Select count(*) from signup3";
                     ResultSet rs=c1.s.executeQuery(q);
                     int count4=4575;
-                    while (rs.next()){
-                        count4++;
+                    if(rs.next()){
+                        count4=count4+Integer.parseInt(rs.getString("count(*)"));
                     }
                     long f=count4+755;
                     first4=first4+count4;
@@ -288,23 +289,27 @@ public class Signup3 implements ActionListener, WindowListener {
                 if(signup3CheckBox.cb6.isSelected()){
                     servicesRequired = servicesRequired+" E-Statement";
                 }
+                if(servicesRequired.equals("")){
+                    JOptionPane.showMessageDialog(null,"Selection of one Service is Mandatory");
+                }else {
 
-                try {
-                    Connector c1=new Connector();
-                    String q1 = "insert into signup3 values('"+signup3Form_no+"','"+accountType+"','"+first8+"','"+first4+"','"+servicesRequired+"')";
-                    String q2 = "insert into login values('"+first8+"','"+first4+"')";
-                    String q3= "insert into bank values('"+first8+"','"+first4+"','0','0','0')";
-                    String q4= "insert into statement (account,pin,deposit,withdraw,balance) values('"+first8+"','"+first4+"','0','0','0')";
-                    c1.s.executeUpdate(q1);
-                    c1.s.executeUpdate(q2);
-                    c1.s.executeUpdate(q3);
-                    c1.s.executeUpdate(q4);
-                    JOptionPane.showMessageDialog(null,"Account no : "+first8+"\n Pin no : "+first4);
-                    signup3LoginWindow.window.setVisible(false);
-                    new Login();
-                    c1.s.close();
-                }catch (Exception e1){
-                    System.out.println(e1.getMessage());
+                    try {
+                        Connector c1 = new Connector();
+                        String q1 = "insert into signup3 values('" + signup3Form_no + "','" + accountType + "','" + first8 + "','" + first4 + "','" + servicesRequired + "')";
+                        String q2 = "insert into login values('" + first8 + "','" + first4 + "')";
+                        String q3 = "insert into bank values('" + first8 + "','" + first4 + "','0','0','0')";
+                        String q4 = "insert into statement (account,pin,deposit,withdraw,balance) values('" + first8 + "','" + first4 + "','0','0','0')";
+                        c1.s.executeUpdate(q1);
+                        c1.s.executeUpdate(q2);
+                        c1.s.executeUpdate(q3);
+                        c1.s.executeUpdate(q4);
+                        JOptionPane.showMessageDialog(null, "Account no : " + first8 + "\n Pin no : " + first4);
+                        signup3LoginWindow.window.setVisible(false);
+                        new Login();
+                        c1.s.close();
+                    } catch (Exception e1) {
+                        System.out.println(e1.getMessage());
+                    }
                 }
 
             }
