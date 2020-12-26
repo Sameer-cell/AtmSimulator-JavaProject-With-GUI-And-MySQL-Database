@@ -30,7 +30,7 @@ public class MiniStatement extends JFrame {
         String balance="";
         try{
             Connector c1=new Connector();
-          String q="select * from statement Where account ='"+number+"' order by transaction_id Desc";
+          String q="select * from statement Where account ='"+number+"' order by transaction_id Desc Limit 10";
             ResultSet rs=c1.s.executeQuery(q);
             while (rs.next()){
                 account=rs.getString("account");
