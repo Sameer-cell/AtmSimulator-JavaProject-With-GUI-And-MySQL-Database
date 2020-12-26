@@ -58,15 +58,21 @@ public class Signup3 implements ActionListener, WindowListener {
             }
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
+                Connector c1=new Connector();
                 try {
-                    Connector c1=new Connector();
                     String q="delete from signup where formno = '"+signup3Form_no+"'";
                     String q1="delete from signup2 where formno = '"+signup3Form_no+"'";
                     c1.s.executeUpdate(q);
                     c1.s.executeUpdate(q1);
-                    c1.s.close();
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
+                }finally {
+                    try{
+                        c1.c.close();
+                        c1.s.close();
+                    }catch (Exception e5){
+                        System.out.println(e5.getMessage());
+                    }
                 }
             }
         });
@@ -221,99 +227,103 @@ public class Signup3 implements ActionListener, WindowListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command=e.getActionCommand();
-        if(command.equals("Cancel")){
-            try{
-                Connector c1=new Connector();
-                String q1="Delete From signup2 WHERE formno ="+signup3Form_no+"";
-                String q2="Delete From signup WHERE formno ="+signup3Form_no+"";
-                c1.s.executeUpdate(q1);
-                c1.s.executeUpdate(q2);
-                c1.s.close();
-            }catch (Exception e1){
-                System.out.println(e1.getMessage());
-            }
-            System.exit(0);
-        }else if(command.equals("Submit")){
-            if(!signup3CheckBox.cb7.isSelected()){
-                JOptionPane.showMessageDialog(null,"Select the last Check Box");
-            }else if(!signup3Radio.jr1.isSelected() && !signup3Radio.jr2.isSelected() && !signup3Radio.jr3.isSelected()
-                    && !signup3Radio.jr4.isSelected()){
-                JOptionPane.showMessageDialog(null,"Fill all the details correctly");
-            } else {
-                String first4="";
-                String first8="459115466871";
-                String accountType="";
-                if(signup3Radio.jr1.isSelected()){
-                    accountType="Saving Account";
-                }else if(signup3Radio.jr2.isSelected()){
-                    accountType="Fixed Deposit Type";
-                }else if(signup3Radio.jr3.isSelected()){
-                    accountType="Current account";
-                }else if(signup3Radio.jr4.isSelected()){
-                    accountType="Recurring Deposit Account";
-                }
-
+        Connector c1=new Connector();
+        try {
+            if (command.equals("Cancel")) {
                 try {
-                    Connector c1=new Connector();
-                    String q="Select count(*) from signup3";
-                    ResultSet rs=c1.s.executeQuery(q);
-                    int count4=4575;
-                    if(rs.next()){
-                        count4=count4+Integer.parseInt(rs.getString("count(*)"));
-                    }
-                    long f=count4+755;
-                    first4=first4+count4;
-                    first8=first8+f;
-                    c1.s.close();
-                }catch (Exception e1){
+                    String q1 = "Delete From signup2 WHERE formno =" + signup3Form_no + "";
+                    String q2 = "Delete From signup WHERE formno =" + signup3Form_no + "";
+                    c1.s.executeUpdate(q1);
+                    c1.s.executeUpdate(q2);
+                } catch (Exception e1) {
                     System.out.println(e1.getMessage());
                 }
-
-
-                String servicesRequired="";
-                if(signup3CheckBox.cb1.isSelected()){
-                    servicesRequired = servicesRequired +" ATM Card";
-                }
-                if(signup3CheckBox.cb2.isSelected()){
-                    servicesRequired = servicesRequired+" Internet Banking";
-                }
-                if(signup3CheckBox.cb3.isSelected()){
-                    servicesRequired = servicesRequired+" Mobile Banking";
-                }
-                if(signup3CheckBox.cb4.isSelected()){
-                    servicesRequired = servicesRequired+" EMAIL Alerts";
-                }
-                if(signup3CheckBox.cb5.isSelected()){
-                    servicesRequired = servicesRequired+" Cheque Book";
-                }
-                if(signup3CheckBox.cb6.isSelected()){
-                    servicesRequired = servicesRequired+" E-Statement";
-                }
-                if(servicesRequired.equals("")){
-                    JOptionPane.showMessageDialog(null,"Selection of one Service is Mandatory");
-                }else {
+                System.exit(0);
+            } else if (command.equals("Submit")) {
+                if (!signup3CheckBox.cb7.isSelected()) {
+                    JOptionPane.showMessageDialog(null, "Select the last Check Box");
+                } else if (!signup3Radio.jr1.isSelected() && !signup3Radio.jr2.isSelected() && !signup3Radio.jr3.isSelected()
+                        && !signup3Radio.jr4.isSelected()) {
+                    JOptionPane.showMessageDialog(null, "Fill all the details correctly");
+                } else {
+                    String first4 = "";
+                    String first8 = "459115466871";
+                    String accountType = "";
+                    if (signup3Radio.jr1.isSelected()) {
+                        accountType = "Saving Account";
+                    } else if (signup3Radio.jr2.isSelected()) {
+                        accountType = "Fixed Deposit Type";
+                    } else if (signup3Radio.jr3.isSelected()) {
+                        accountType = "Current account";
+                    } else if (signup3Radio.jr4.isSelected()) {
+                        accountType = "Recurring Deposit Account";
+                    }
 
                     try {
-                        Connector c1 = new Connector();
-                        String q1 = "insert into signup3 values('" + signup3Form_no + "','" + accountType + "','" + first8 + "','" + first4 + "','" + servicesRequired + "')";
-                        String q2 = "insert into login values('" + first8 + "','" + first4 + "')";
-                        String q3 = "insert into bank values('" + first8 + "','" + first4 + "','0','0','0')";
-                        String q4 = "insert into statement (account,pin,deposit,withdraw,balance) values('" + first8 + "','" + first4 + "','0','0','0')";
-                        c1.s.executeUpdate(q1);
-                        c1.s.executeUpdate(q2);
-                        c1.s.executeUpdate(q3);
-                        c1.s.executeUpdate(q4);
-                        JOptionPane.showMessageDialog(null, "Account no : " + first8 + "\n Pin no : " + first4);
-                        signup3LoginWindow.window.setVisible(false);
-                        new Login();
-                        c1.s.close();
+                        String q = "Select count(*) from signup3";
+                        ResultSet rs = c1.s.executeQuery(q);
+                        int count4 = 4575;
+                        if (rs.next()) {
+                            count4 = count4 + Integer.parseInt(rs.getString("count(*)"));
+                        }
+                        long f = count4 + 755;
+                        first4 = first4 + count4;
+                        first8 = first8 + f;
                     } catch (Exception e1) {
                         System.out.println(e1.getMessage());
                     }
+
+
+                    String servicesRequired = "";
+                    if (signup3CheckBox.cb1.isSelected()) {
+                        servicesRequired = servicesRequired + " ATM Card";
+                    }
+                    if (signup3CheckBox.cb2.isSelected()) {
+                        servicesRequired = servicesRequired + " Internet Banking";
+                    }
+                    if (signup3CheckBox.cb3.isSelected()) {
+                        servicesRequired = servicesRequired + " Mobile Banking";
+                    }
+                    if (signup3CheckBox.cb4.isSelected()) {
+                        servicesRequired = servicesRequired + " EMAIL Alerts";
+                    }
+                    if (signup3CheckBox.cb5.isSelected()) {
+                        servicesRequired = servicesRequired + " Cheque Book";
+                    }
+                    if (signup3CheckBox.cb6.isSelected()) {
+                        servicesRequired = servicesRequired + " E-Statement";
+                    }
+                    if (servicesRequired.equals("")) {
+                        JOptionPane.showMessageDialog(null, "Selection of one Service is Mandatory");
+                    } else {
+
+                        try {
+                            String q1 = "insert into signup3 values('" + signup3Form_no + "','" + accountType + "','" + first8 + "','" + first4 + "','" + servicesRequired + "')";
+                            String q2 = "insert into login values('" + first8 + "','" + first4 + "')";
+                            String q3 = "insert into bank values('" + first8 + "','" + first4 + "','0','0','0')";
+                            String q4 = "insert into statement (account,pin,deposit,withdraw,balance) values('" + first8 + "','" + first4 + "','0','0','0')";
+                            c1.s.executeUpdate(q1);
+                            c1.s.executeUpdate(q2);
+                            c1.s.executeUpdate(q3);
+                            c1.s.executeUpdate(q4);
+                            JOptionPane.showMessageDialog(null, "Account no : " + first8 + "\n Pin no : " + first4);
+                            signup3LoginWindow.window.setVisible(false);
+                            new Login();
+                        } catch (Exception e1) {
+                            System.out.println(e1.getMessage());
+                        }
+                    }
+
                 }
 
             }
-
+        }finally {
+            try{
+                c1.c.close();
+                c1.s.close();
+            }catch (Exception e5){
+                System.out.println(e5.getMessage());
+            }
         }
     }
 
