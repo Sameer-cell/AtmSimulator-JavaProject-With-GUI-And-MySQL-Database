@@ -28,8 +28,8 @@ public class MiniStatement extends JFrame {
         String deposit="";
         String withdraw="";
         String balance="";
+        Connector c1=new Connector();
         try{
-            Connector c1=new Connector();
           String q="select * from statement Where account ='"+number+"' order by transaction_id Desc Limit 10";
             ResultSet rs=c1.s.executeQuery(q);
             while (rs.next()){
@@ -41,10 +41,16 @@ public class MiniStatement extends JFrame {
                 model.addRow(new Object[]{account,pin,deposit,withdraw,balance});
             }
             setVisible(true);
-            c1.s.close();
         }catch (Exception e1){
             System.out.println(e1.getMessage());
             e1.printStackTrace();
+        }finally {
+            try{
+                c1.c.close();
+                c1.s.close();
+            }catch (Exception e5){
+                System.out.println(e5.getMessage());
+            }
         }
     }
 
