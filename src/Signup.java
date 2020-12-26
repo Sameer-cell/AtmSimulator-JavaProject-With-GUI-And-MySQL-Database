@@ -20,8 +20,8 @@ public class Signup implements ActionListener {
 
 
     public Signup(){
+        Connector c1=new Connector();
         try{
-            Connector c1=new Connector();
             String q="Select count(*) from signup";
             ResultSet rs=c1.s.executeQuery(q);
             int count=1;
@@ -32,6 +32,13 @@ public class Signup implements ActionListener {
             c1.s.close();
         }catch (Exception e){
             System.out.println(e.getMessage());
+        }finally {
+            try{
+                c1.c.close();
+                c1.s.close();
+            }catch (Exception e5){
+                System.out.println(e5.getMessage());
+            }
         }
 
         signupLoginWindow.loginWindow();
@@ -244,6 +251,7 @@ public class Signup implements ActionListener {
                 String city=signupTextField.jt5.getText();
                 String pin_code=signupTextField.jt6.getText();
                 String state=signupTextField.jt7.getText();
+            Connector c1=new Connector();
                 try{
                     if(signupTextField.jt1.getText().equals("") || signupTextField.jt2.getText().equals("") ||
                             signupTextField.jt3.getText().equals("") || signupTextField.jt4.getText().equals("") ||
@@ -255,7 +263,6 @@ public class Signup implements ActionListener {
                     }else if(!signupTextField.jr3.isSelected() && !signupTextField.jr4.isSelected()){
                         JOptionPane.showMessageDialog(null,"Fill all the details correctly");
                     } else{
-                        Connector c1=new Connector();
                         String q="insert into signup (name,fname,date,month,year,gender,email, marital,address,city,pincode,state,formno) values ('"
                                 +name+"','"
                                 +fathersName+"','"+date+"','"+month+"','"+year+"','"
@@ -264,10 +271,16 @@ public class Signup implements ActionListener {
                         c1.s.executeUpdate(q);
                         signupLoginWindow.window.setVisible(false);
                         new Signup2();
-                        c1.s.close();
                     }
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
+                }finally {
+                    try{
+                        c1.c.close();
+                        c1.s.close();
+                    }catch (Exception e5){
+                        System.out.println(e5.getMessage());
+                    }
                 }
         }
     }
