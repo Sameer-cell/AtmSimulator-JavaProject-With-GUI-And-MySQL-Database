@@ -130,8 +130,8 @@ public class Transaction implements ActionListener {
                 transctionLW.window.setVisible(false);
                 break;
             case "BALANCE ENQUIRY":
+                Connector c1=new Connector();
                 try {
-                    Connector c1=new Connector();
                     String q="Select balance from bank Where account ='"+account_no+"' AND pin ='"+pin_no+"'";
                     ResultSet rs=c1.s.executeQuery(q);
                     if(rs.next()){
@@ -140,9 +140,15 @@ public class Transaction implements ActionListener {
                     }else {
                         System.out.println("Some error");
                     }
-                    c1.s.close();
                 }catch (Exception e1){
                     System.out.println(e1.getMessage());
+                }finally {
+                    try{
+                        c1.c.close();
+                        c1.s.close();
+                    }catch (Exception e5){
+                        System.out.println(e5.getMessage());
+                    }
                 }
                 break;
             case "EXIT":
