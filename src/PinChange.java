@@ -112,7 +112,13 @@ public class PinChange implements ActionListener {
                 String reEnternewPin=toString(cc2);
                 if(!newPin.equals(reEnternewPin)){
                     JOptionPane.showMessageDialog(null,"ReEnter the new pin correctly");
-                }else{
+                }else if(newPin.equals("")){
+                    JOptionPane.showMessageDialog(null,"ReEnter the new pin correctly");
+                }
+                else if(newPin.length()<4){
+                    JOptionPane.showMessageDialog(null,"Pin should contain minimum 4 Digits");
+                }
+                else{
                     try {
                         Connector c1=new Connector();
                         String q="Select pin from Login Where cardno ='"+p_accountno+"'AND pin ='"+currentPin+"'";
