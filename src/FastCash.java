@@ -108,184 +108,182 @@ public class FastCash implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command=e.getActionCommand();
-        switch (command){
-            case "Exit":
-                System.exit(0);
-                break;
-            case "100":
-                try {
-                    String pin=f_pinno;
-                    Connector c1=new Connector();
-                    String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
-                    ResultSet rs=c1.s.executeQuery(q1);
-                    if(rs.next()){
-                        double balance=Double.parseDouble(rs.getString("balance"));
-                        double amount=100;
-                        balance=balance-amount;
-                        if(balance<=0){
-                            JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
-                        }else {
-                            String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
-                            c1.s.executeUpdate(q3);
-                            c1.s.executeUpdate(q2);
-                            JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
-                            fastcashLW.window.setVisible(false);
-                            new Transaction();
-                            c1.s.close();
+        Connector c1 = new Connector();
+        try {
+            switch (command) {
+                case "Exit":
+                    System.exit(0);
+                    break;
+                case "100":
+                    try {
+                        String pin = f_pinno;
+                        String q1 = "select balance from bank where account = '" + f_accountno + "' AND pin ='" + pin + "'";
+                        ResultSet rs = c1.s.executeQuery(q1);
+                        if (rs.next()) {
+                            double balance = Double.parseDouble(rs.getString("balance"));
+                            double amount = 100;
+                            balance = balance - amount;
+                            if (balance <= 0) {
+                                JOptionPane.showMessageDialog(null, "Balance cannot be Negative");
+                            } else {
+                                String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
+                                String q3 = "insert into statement (account,pin,deposit,withdraw,balance) values(" + f_accountno + "," + pin + ",'0'," + amount + "," + balance + ")";
+                                c1.s.executeUpdate(q3);
+                                c1.s.executeUpdate(q2);
+                                JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
+                                fastcashLW.window.setVisible(false);
+                                new Transaction();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Incorrect pin");
                         }
-                    }else {
-                        JOptionPane.showMessageDialog(null,"Incorrect pin");
+                    } catch (Exception e1) {
+                        System.out.println(e1.getMessage());
                     }
-                }catch (Exception e1){
-                    System.out.println(e1.getMessage());
-                }
-                break;
-            case "500":
-                try {
-                    String pin=f_pinno;
-                    Connector c1=new Connector();
-                    String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
-                    ResultSet rs=c1.s.executeQuery(q1);
-                    if(rs.next()){
-                        double balance=Double.parseDouble(rs.getString("balance"));
-                        double amount=500;
-                        balance=balance-amount;
-                        if(balance<=0){
-                            JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
-                        }else {
-                            String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
-                            c1.s.executeUpdate(q3);
-                            c1.s.executeUpdate(q2);
-                            JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
-                            fastcashLW.window.setVisible(false);
-                            new Transaction();
-                            c1.s.close();
+                    break;
+                case "500":
+                    try {
+                        String pin = f_pinno;
+                        String q1 = "select balance from bank where account = '" + f_accountno + "' AND pin ='" + pin + "'";
+                        ResultSet rs = c1.s.executeQuery(q1);
+                        if (rs.next()) {
+                            double balance = Double.parseDouble(rs.getString("balance"));
+                            double amount = 500;
+                            balance = balance - amount;
+                            if (balance <= 0) {
+                                JOptionPane.showMessageDialog(null, "Balance cannot be Negative");
+                            } else {
+                                String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
+                                String q3 = "insert into statement (account,pin,deposit,withdraw,balance) values(" + f_accountno + "," + pin + ",'0'," + amount + "," + balance + ")";
+                                c1.s.executeUpdate(q3);
+                                c1.s.executeUpdate(q2);
+                                JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
+                                fastcashLW.window.setVisible(false);
+                                new Transaction();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Incorrect pin");
                         }
-                    }else {
-                        JOptionPane.showMessageDialog(null,"Incorrect pin");
+                    } catch (Exception e1) {
+                        System.out.println(e1.getMessage());
                     }
-                }catch (Exception e1){
-                    System.out.println(e1.getMessage());
-                }
-                break;
-            case "1000":
-                try {
-                    String pin=f_pinno;
-                    Connector c1=new Connector();
-                    String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
-                    ResultSet rs=c1.s.executeQuery(q1);
-                    if(rs.next()){
-                        double balance=Double.parseDouble(rs.getString("balance"));
-                        double amount=1000;
-                        balance=balance-amount;
-                        if(balance<=0){
-                            JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
-                        }else {
-                            String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
-                            c1.s.executeUpdate(q3);
-                            c1.s.executeUpdate(q2);
-                            JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
-                            fastcashLW.window.setVisible(false);
-                            new Transaction();
-                            c1.s.close();
+                    break;
+                case "1000":
+                    try {
+                        String pin = f_pinno;
+                        String q1 = "select balance from bank where account = '" + f_accountno + "' AND pin ='" + pin + "'";
+                        ResultSet rs = c1.s.executeQuery(q1);
+                        if (rs.next()) {
+                            double balance = Double.parseDouble(rs.getString("balance"));
+                            double amount = 1000;
+                            balance = balance - amount;
+                            if (balance <= 0) {
+                                JOptionPane.showMessageDialog(null, "Balance cannot be Negative");
+                            } else {
+                                String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
+                                String q3 = "insert into statement (account,pin,deposit,withdraw,balance) values(" + f_accountno + "," + pin + ",'0'," + amount + "," + balance + ")";
+                                c1.s.executeUpdate(q3);
+                                c1.s.executeUpdate(q2);
+                                JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
+                                fastcashLW.window.setVisible(false);
+                                new Transaction();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Incorrect pin");
                         }
-                    }else {
-                        JOptionPane.showMessageDialog(null,"Incorrect pin");
+                    } catch (Exception e1) {
+                        System.out.println(e1.getMessage());
                     }
-                }catch (Exception e1){
-                    System.out.println(e1.getMessage());
-                }
-                break;
-            case "2000":
-                try {
-                    String pin=f_pinno;
-                    Connector c1=new Connector();
-                    String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
-                    ResultSet rs=c1.s.executeQuery(q1);
-                    if(rs.next()){
-                        double balance=Double.parseDouble(rs.getString("balance"));
-                        double amount=2000;
-                        balance=balance-amount;
-                        if(balance<=0){
-                            JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
-                        }else {
-                            String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
-                            c1.s.executeUpdate(q3);
-                            c1.s.executeUpdate(q2);
-                            JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
-                            fastcashLW.window.setVisible(false);
-                            new Transaction();
-                            c1.s.close();
+                    break;
+                case "2000":
+                    try {
+                        String pin = f_pinno;
+                        String q1 = "select balance from bank where account = '" + f_accountno + "' AND pin ='" + pin + "'";
+                        ResultSet rs = c1.s.executeQuery(q1);
+                        if (rs.next()) {
+                            double balance = Double.parseDouble(rs.getString("balance"));
+                            double amount = 2000;
+                            balance = balance - amount;
+                            if (balance <= 0) {
+                                JOptionPane.showMessageDialog(null, "Balance cannot be Negative");
+                            } else {
+                                String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
+                                String q3 = "insert into statement (account,pin,deposit,withdraw,balance) values(" + f_accountno + "," + pin + ",'0'," + amount + "," + balance + ")";
+                                c1.s.executeUpdate(q3);
+                                c1.s.executeUpdate(q2);
+                                JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
+                                fastcashLW.window.setVisible(false);
+                                new Transaction();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Incorrect pin");
                         }
-                    }else {
-                        JOptionPane.showMessageDialog(null,"Incorrect pin");
+                    } catch (Exception e1) {
+                        System.out.println(e1.getMessage());
                     }
-                }catch (Exception e1){
-                    System.out.println(e1.getMessage());
-                }
-                break;
-            case "5000":
-                try {
-                    String pin=f_pinno;
-                    Connector c1=new Connector();
-                    String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
-                    ResultSet rs=c1.s.executeQuery(q1);
-                    if(rs.next()){
-                        double balance=Double.parseDouble(rs.getString("balance"));
-                        double amount=5000;
-                        balance=balance-amount;
-                        if(balance<=0){
-                            JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
-                        }else {
-                            String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
-                            c1.s.executeUpdate(q3);
-                            c1.s.executeUpdate(q2);
-                            JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
-                            fastcashLW.window.setVisible(false);
-                            new Transaction();
-                            c1.s.close();
+                    break;
+                case "5000":
+                    try {
+                        String pin = f_pinno;
+                        String q1 = "select balance from bank where account = '" + f_accountno + "' AND pin ='" + pin + "'";
+                        ResultSet rs = c1.s.executeQuery(q1);
+                        if (rs.next()) {
+                            double balance = Double.parseDouble(rs.getString("balance"));
+                            double amount = 5000;
+                            balance = balance - amount;
+                            if (balance <= 0) {
+                                JOptionPane.showMessageDialog(null, "Balance cannot be Negative");
+                            } else {
+                                String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
+                                String q3 = "insert into statement (account,pin,deposit,withdraw,balance) values(" + f_accountno + "," + pin + ",'0'," + amount + "," + balance + ")";
+                                c1.s.executeUpdate(q3);
+                                c1.s.executeUpdate(q2);
+                                JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
+                                fastcashLW.window.setVisible(false);
+                                new Transaction();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Incorrect pin");
                         }
-                    }else {
-                        JOptionPane.showMessageDialog(null,"Incorrect pin");
+                    } catch (Exception e1) {
+                        System.out.println(e1.getMessage());
                     }
-                }catch (Exception e1){
-                    System.out.println(e1.getMessage());
-                }
-                break;
-            case "10000":
-                try {
-                    String pin=f_pinno;
-                    Connector c1=new Connector();
-                    String q1="select balance from bank where account = '" + f_accountno + "' AND pin ='"+pin+"'";
-                    ResultSet rs=c1.s.executeQuery(q1);
-                    if(rs.next()){
-                        double balance=Double.parseDouble(rs.getString("balance"));
-                        double amount=10000;
-                        balance=balance-amount;
-                        if(balance<=0){
-                            JOptionPane.showMessageDialog(null,"Balance cannot be Negative");
-                        }else {
-                            String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
-                            String q3= "insert into statement (account,pin,deposit,withdraw,balance) values("+f_accountno+","+pin+",'0',"+amount+","+balance+")";
-                            c1.s.executeUpdate(q3);
-                            c1.s.executeUpdate(q2);
-                            JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
-                            fastcashLW.window.setVisible(false);
-                            new Transaction();
-                            c1.s.close();
+                    break;
+                case "10000":
+                    try {
+                        String pin = f_pinno;
+                        String q1 = "select balance from bank where account = '" + f_accountno + "' AND pin ='" + pin + "'";
+                        ResultSet rs = c1.s.executeQuery(q1);
+                        if (rs.next()) {
+                            double balance = Double.parseDouble(rs.getString("balance"));
+                            double amount = 10000;
+                            balance = balance - amount;
+                            if (balance <= 0) {
+                                JOptionPane.showMessageDialog(null, "Balance cannot be Negative");
+                            } else {
+                                String q2 = "UPDATE bank SET withdraw =" + amount + ",balance = '" + balance + "' WHERE account ='" + f_accountno + "'";
+                                String q3 = "insert into statement (account,pin,deposit,withdraw,balance) values(" + f_accountno + "," + pin + ",'0'," + amount + "," + balance + ")";
+                                c1.s.executeUpdate(q3);
+                                c1.s.executeUpdate(q2);
+                                JOptionPane.showMessageDialog(null, "Rs. " + amount + " Withdrawn Successfully");
+                                fastcashLW.window.setVisible(false);
+                                new Transaction();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Incorrect pin");
                         }
-                    }else {
-                        JOptionPane.showMessageDialog(null,"Incorrect pin");
+                    } catch (Exception e1) {
+                        System.out.println(e1.getMessage());
                     }
-                }catch (Exception e1){
-                    System.out.println(e1.getMessage());
-                }
-                break;
+                    break;
+            }
+        }finally {
+            try{
+                c1.c.close();
+                c1.s.close();
+            }catch (Exception e5){
+                System.out.println(e5.getMessage());
+            }
         }
 
     }
