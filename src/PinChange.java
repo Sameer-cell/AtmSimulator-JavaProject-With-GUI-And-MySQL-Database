@@ -119,8 +119,8 @@ public class PinChange implements ActionListener {
                     JOptionPane.showMessageDialog(null,"Pin should contain minimum 4 Digits");
                 }
                 else{
+                    Connector c1=new Connector();
                     try {
-                        Connector c1=new Connector();
                         String q="Select pin from Login Where cardno ='"+p_accountno+"'AND pin ='"+currentPin+"'";
                         ResultSet rs=c1.s.executeQuery(q);
                         if(!rs.next()){
@@ -137,10 +137,16 @@ public class PinChange implements ActionListener {
                             JOptionPane.showMessageDialog(null,"Pin Changed Successfully");
                             pinChangeLW.window.setVisible(false);
                             new Transaction();
-                            c1.s.close();
                         }
                     }catch (Exception e1){
                         System.out.println(e1.getMessage());
+                    }finally {
+                        try{
+                            c1.c.close();
+                            c1.s.close();
+                        }catch (Exception e5){
+                            System.out.println(e5.getMessage());
+                        }
                     }
 
                 }
