@@ -11,6 +11,7 @@ public class LoginWindow {
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setLocation(400, 20);
         window.getContentPane().setBackground(new Color(51, 255, 247));
+        window.setResizable(false);
         window.setVisible(true);
     }
 }
