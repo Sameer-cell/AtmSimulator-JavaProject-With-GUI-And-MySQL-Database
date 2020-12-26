@@ -103,8 +103,8 @@ public class Login implements ActionListener {
                 break;
 
             case "SignIn":
+                Connector c1 = new Connector();
                     try {
-                        Connector c1 = new Connector();
                         String account_no = textField.jt1.getText();
                         accountNumber=account_no;
                         char[] c= textField.jp1.getPassword();
@@ -118,11 +118,17 @@ public class Login implements ActionListener {
                             new Transaction();
                         } else {
                             JOptionPane.showMessageDialog(null, "Incorrect Card Number or Password");
-
                         }
-                        c1.s.close();
                     }catch (Exception e1){
                         System.out.println(e1.getMessage());
+                    }
+                    finally {
+                        try{
+                            c1.c.close();
+                            c1.s.close();
+                        }catch (Exception e5){
+                            System.out.println(e5.getMessage());
+                        }
                     }
                 break;
             case "SignUp":
